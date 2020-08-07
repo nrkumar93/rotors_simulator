@@ -5,9 +5,9 @@
   <arg name="namespace" default="$(arg mav_name)"/>
   <arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
-  <arg name="x" default="0.0"/>
-  <arg name="y" default="0.0"/>
-  <arg name="z" default="0.1"/>
+  <arg name="x" default="-1"/>
+  <arg name="y" default="-8"/>
+  <arg name="z" default="4.5"/>
   <arg name="enable_logging" default="false"/>
   <arg name="enable_ground_truth" default="true"/>
   <arg name="log_file" default="$(arg mav_name)"/>
@@ -16,7 +16,7 @@
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="
-    $(find xacro)/xacro '$(arg model)'
+    $(find xacro)/xacro.py '$(arg model)'
     enable_logging:=$(arg enable_logging)
     enable_ground_truth:=$(arg enable_ground_truth)
     enable_mavlink_interface:=$(arg enable_mavlink_interface)
@@ -25,7 +25,13 @@
     mav_name:=$(arg mav_name)
     namespace:=$(arg namespace)"
   />
+
   <param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
+<!--   <arg name="world_frame" default="world"/>
+  <arg name="base_link_frame" default="$(arg tf_prefix)/base_link"/>
+  <arg name="model" default="$(find hector_quadrotor_description)/urdf/quadrotor.gazebo.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg model)' base_link_frame:=$(arg base_link_frame) world_frame:=$(arg world_frame)" /> -->
+
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="spawn_$(arg namespace)" pkg="gazebo_ros" type="spawn_model"
